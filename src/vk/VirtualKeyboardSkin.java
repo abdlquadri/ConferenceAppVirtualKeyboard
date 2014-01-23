@@ -154,14 +154,14 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard> {
     // done it based on the pref width of a text node with the right font).
     @Override
     protected double computePrefWidth(double d, double d1, double d2, double d3, double d4) {
-        final Insets insets = getSkinnable().getInsets();
+        final Insets insets = new Insets(d, d1, d2, d3);
         return insets.getLeft() + (56 * numCols) + insets.getRight();
     }
 
     // Pref height is just some value. This isn't overly important.
     @Override
     protected double computePrefHeight(double d, double d1, double d2, double d3, double d4) {
-        final Insets insets = getSkinnable().getInsets();
+        final Insets insets = new Insets(d, d1, d2, d3);
         return insets.getTop() + (80 * 5) + insets.getBottom();
     }
 
@@ -171,22 +171,18 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard> {
     @Override
     protected void layoutChildren(double d, double d1, double d2, double d3) {
         super.layoutChildren(d, d1, d2, d3); //To change body of generated methods, choose Tools | Templates.
-System.out.println(d );    
-System.out.println(d1 );    
-System.out.println(d2 );    
-System.out.println(d3 );    
 // I have fixed width columns, all the same.
-        final double colWidth = ((d - ((numCols - 1) * GAP)) / numCols);
-        double rowHeight = ((d1 - (4 * GAP)) / 5); // 5 rows per keyboard
+        final double colWidth = ((d2 - ((numCols - 1) * GAP)) / numCols);
+        double rowHeight = ((d3 - (4 * GAP)) / 5); // 5 rows per keyboard
         // The first row is 2/3 the height
         double firstRowHeight = rowHeight * .666;
         rowHeight += ((rowHeight * .333) / 4);
 
-        double rowY = d2;
+        double rowY = d1;
         double h = firstRowHeight;
         for (List<Key> row : board) {
             for (Key key : row) {
-                double startX = d3 + (key.col * (colWidth + GAP));
+                double startX = d + (key.col * (colWidth + GAP));
                 double width = (key.colSpan * (colWidth + GAP)) - GAP;
                 key.resizeRelocate((int) (startX + .5),
                         (int) (rowY + .5),
@@ -307,9 +303,8 @@ System.out.println(d3 );
 
         protected KeyEvent event(EventType<KeyEvent> type) {
             
-            return event(type);
-//            return KeyEvent.impl_keyEvent(getSkinnable(), chars, "", 0,
-//                    shiftDown, false, false, false, type);
+            return new KeyEvent(type, chars, chars, KeyCode.UP, capsDown, capsDown, capsDown, capsDown);
+
         }
     }
 
@@ -397,7 +392,7 @@ System.out.println(d3 );
         @Override
         protected KeyEvent event(EventType<KeyEvent> type) {
             if (type == KeyEvent.KEY_PRESSED || type == KeyEvent.KEY_RELEASED) {
-                return event(type);
+               return new KeyEvent(type, chars, chars, code, capsDown, capsDown, capsDown, capsDown);
             } else {
                 return super.event(type);
             }
