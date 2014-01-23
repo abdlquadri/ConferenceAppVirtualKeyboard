@@ -31,23 +31,21 @@
  */
 package vk;
 
-import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.scene.control.behavior.BehaviorBase;
-import com.sun.javafx.scene.control.skin.SkinBase;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.control.SkinBase;
 //import javafx.scene.control.SkinBase;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -62,7 +60,7 @@ import vk.robot.IRobot;
  * type. Where you place the keyboard relative to the screen, how it is
  * displayed, etc is completely up to you.
  */
-public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<VirtualKeyboard>> {
+public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard> {
 
     private static final int GAP = 6;
 
@@ -71,9 +69,8 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
     private boolean capsDown = false;
     private boolean shiftDown = false;
 
-    
     private final List<IRobot> robotHandler = new ArrayList<>();
-    
+
     void clearShift() {
         shiftDown = false;
         updateKeys();
@@ -104,22 +101,18 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
      * @param keyboard
      */
     public VirtualKeyboardSkin(VirtualKeyboard keyboard) {
-        super(keyboard, new BehaviorBase<>(keyboard));
-     
-        registerChangeListener(keyboard.typeProperty(), "type");
-        rebuild();
-        
-    }
+        super(keyboard);
 
-    @Override
-    protected void handleControlPropertyChanged(String propertyReference) {
-        // With Java 8 (or is it 7?) I can do switch on strings instead
-        if ("type".equals(propertyReference)) {
-            // The type has changed, so we will need to rebuild the entire keyboard.
-            // This happens whenever the user switches from one keyboard layout to
-            // another, such as by pressing the "ABC" key on a numeric layout.
-            rebuild();
-        }
+        keyboard.typeProperty().addListener(new ChangeListener<VirtualKeyboard.Type>() {
+
+            @Override
+            public void changed(ObservableValue<? extends VirtualKeyboard.Type> ov, VirtualKeyboard.Type t, VirtualKeyboard.Type t1) {
+                rebuild();
+            }
+
+        });
+        rebuild();
+
     }
 
     /**
@@ -143,7 +136,7 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
                 throw new AssertionError("Unhandled Virtual Keyboard type");
         }
 
-        board = loadBoard(boardName);   
+        board = loadBoard(boardName);
 //        layoutChildren(36, 36, 36, 35);
         getChildren().clear();
         numCols = 0;
@@ -153,42 +146,47 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
             }
             getChildren().addAll(row);
         }
-        
-     
-        
+
     }
 
     // This skin is designed such that it gives equal widths to all columns. So
     // the pref width is just some hard-coded value (although I could have maybe
     // done it based on the pref width of a text node with the right font).
     @Override
-    protected double computePrefWidth(double height) {
-        final Insets insets = getInsets();
+    protected double computePrefWidth(double d, double d1, double d2, double d3, double d4) {
+        final Insets insets = getSkinnable().getInsets();
         return insets.getLeft() + (56 * numCols) + insets.getRight();
     }
 
     // Pref height is just some value. This isn't overly important.
     @Override
-    protected double computePrefHeight(double width) {
-        final Insets insets = getInsets();
+    protected double computePrefHeight(double d, double d1, double d2, double d3, double d4) {
+        final Insets insets = getSkinnable().getInsets();
         return insets.getTop() + (80 * 5) + insets.getBottom();
     }
 
+    //    // Lays the buttons comprising the current keyboard out. The first row is always
+//    // a "short" row (about 2/3 in height of a normal row), followed by 4 normal rows.
+
     @Override
-    protected void layoutChildren() {
-        super.layoutChildren(); //To change body of generated methods, choose Tools | Templates.
-         // I have fixed width columns, all the same.
-        final double colWidth = ((getWidth() - ((numCols - 1) * GAP)) / numCols);
-        double rowHeight = ((getHeight() - (4 * GAP)) / 5); // 5 rows per keyboard
+    protected void layoutChildren(double d, double d1, double d2, double d3) {
+        super.layoutChildren(d, d1, d2, d3); //To change body of generated methods, choose Tools | Templates.
+System.out.println(d );    
+System.out.println(d1 );    
+System.out.println(d2 );    
+System.out.println(d3 );    
+// I have fixed width columns, all the same.
+        final double colWidth = ((d - ((numCols - 1) * GAP)) / numCols);
+        double rowHeight = ((d1 - (4 * GAP)) / 5); // 5 rows per keyboard
         // The first row is 2/3 the height
         double firstRowHeight = rowHeight * .666;
         rowHeight += ((rowHeight * .333) / 4);
 
-        double rowY = getLayoutY();
+        double rowY = d2;
         double h = firstRowHeight;
         for (List<Key> row : board) {
             for (Key key : row) {
-                double startX = getLayoutX() + (key.col * (colWidth + GAP));
+                double startX = d3 + (key.col * (colWidth + GAP));
                 double width = (key.colSpan * (colWidth + GAP)) - GAP;
                 key.resizeRelocate((int) (startX + .5),
                         (int) (rowY + .5),
@@ -199,30 +197,8 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
         }
     }
 
-//    // Lays the buttons comprising the current keyboard out. The first row is always
-//    // a "short" row (about 2/3 in height of a normal row), followed by 4 normal rows.
-//    protected void layoutChildren(double contentX, double contentY, double contentWidth, double contentHeight) {
-//        // I have fixed width columns, all the same.
-//        final double colWidth = ((contentWidth - ((numCols - 1) * GAP)) / numCols);
-//        double rowHeight = ((contentHeight - (4 * GAP)) / 5); // 5 rows per keyboard
-//        // The first row is 2/3 the height
-//        double firstRowHeight = rowHeight * .666;
-//        rowHeight += ((rowHeight * .333) / 4);
-//
-//        double rowY = contentY;
-//        double h = firstRowHeight;
-//        for (List<Key> row : board) {
-//            for (Key key : row) {
-//                double startX = contentX + (key.col * (colWidth + GAP));
-//                double width = (key.colSpan * (colWidth + GAP)) - GAP;
-//                key.resizeRelocate((int) (startX + .5),
-//                        (int) (rowY + .5),
-//                        width, h);
-//            }
-//            rowY += h + GAP;
-//            h = rowHeight;
-//        }
-//    }
+    
+    
 
     /**
      * A Key on the virtual keyboard. This is simply a Region. Some information
@@ -302,25 +278,22 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
             if (handler != null) {
                 handler.handle(event(KeyEvent.KEY_PRESSED));
             }
-            
+
             sendToComponent(this.chars.charAt(0), false);
 
         }
-        
+
         /**
-	 * send keyEvent to iRobot implementation
-	 * 
-	 * @param ch
-	 * @param ctrl
-	 */
-	private void sendToComponent(char ch, boolean ctrl) {
+         * send keyEvent to iRobot implementation
+         *
+         * @param ch
+         * @param ctrl
+         */
+        private void sendToComponent(char ch, boolean ctrl) {
 
-            VirtualKeyboardSkin kbs = (VirtualKeyboardSkin)this.getParent();
-            new FXRobotHandler().sendToComponent(kbs.getParent(), ch, ctrl);
-            
+            new FXRobotHandler().sendToComponent(getSkinnable(), ch, ctrl);
 
-	}
-
+        }
 
         @Override
         protected void release() {
@@ -333,8 +306,10 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
         }
 
         protected KeyEvent event(EventType<KeyEvent> type) {
-            return KeyEvent.impl_keyEvent(getSkinnable(), chars, "", 0,
-                    shiftDown, false, false, false, type);
+            
+            return event(type);
+//            return KeyEvent.impl_keyEvent(getSkinnable(), chars, "", 0,
+//                    shiftDown, false, false, false, type);
         }
     }
 
@@ -422,8 +397,7 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
         @Override
         protected KeyEvent event(EventType<KeyEvent> type) {
             if (type == KeyEvent.KEY_PRESSED || type == KeyEvent.KEY_RELEASED) {
-                return KeyEvent.impl_keyEvent(getSkinnable(), chars, chars, code.impl_getCode(),
-                        shiftDown, false, false, false, type);
+                return event(type);
             } else {
                 return super.event(type);
             }

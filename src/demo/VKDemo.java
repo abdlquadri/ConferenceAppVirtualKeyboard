@@ -6,7 +6,6 @@
 package demo;
 
 import com.sun.javafx.tk.TKSceneListener;
-import com.sun.javafx.tk.quantum.GlassScene;
 import java.lang.reflect.Field;
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
@@ -73,13 +72,6 @@ public class VKDemo extends Application {
                 private Object sceneListener;
                 @Override public void handle(KeyEvent event) {
                     if (sceneListener == null) {
-                        try {
-                            GlassScene peer = (GlassScene) scene.impl_getPeer();
-                            Field f = GlassScene.class.getDeclaredField("sceneListener");
-                            f.setAccessible(true);
-                            sceneListener = (TKSceneListener) f.get(peer);
-                        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-                        }
                     }
 
                     // TODO not sure how to implement
