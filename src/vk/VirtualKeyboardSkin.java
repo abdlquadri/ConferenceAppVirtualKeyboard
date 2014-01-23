@@ -31,15 +31,18 @@
  */
 package vk;
 
+import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.scene.control.behavior.BehaviorBase;
 import com.sun.javafx.scene.control.skin.SkinBase;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
@@ -51,6 +54,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
+import vk.robot.FXRobotHandler;
+import vk.robot.IRobot;
 
 /**
  * The VirtualKeyboardSkin simply has a pile of keys depending on the keyboard
@@ -66,6 +71,9 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
     private boolean capsDown = false;
     private boolean shiftDown = false;
 
+    
+    private final List<IRobot> robotHandler = new ArrayList<>();
+    
     void clearShift() {
         shiftDown = false;
         updateKeys();
@@ -294,9 +302,25 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
             if (handler != null) {
                 handler.handle(event(KeyEvent.KEY_PRESSED));
             }
-            TextInputControl tic = (TextInputControl)getScene().focusOwnerProperty().getValue();
-            tic.insertText(tic.getCaretPosition(), this.chars);
+            
+            sendToComponent(this.chars.charAt(0), true);
+
         }
+        
+        /**
+	 * send keyEvent to iRobot implementation
+	 * 
+	 * @param ch
+	 * @param ctrl
+	 */
+	private void sendToComponent(char ch, boolean ctrl) {
+
+            VirtualKeyboardSkin kbs = (VirtualKeyboardSkin)this.getParent();
+            new FXRobotHandler().sendToComponent(kbs.getParent(), ch, ctrl);
+            
+
+	}
+
 
         @Override
         protected void release() {
