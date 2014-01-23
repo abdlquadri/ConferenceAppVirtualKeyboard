@@ -70,7 +70,10 @@ public class FXRobotHandler implements IRobot {
 				robot.keyRelease(KeyCode.CONTROL);
 				return;
 			}
-			switch (ch) {
+			
+
+		}else{
+                    switch (ch) {
 			case java.awt.event.KeyEvent.VK_ENTER:
 				robot.keyPress(KeyCode.ENTER);
 				robot.keyType(KeyCode.ENTER, Character.toString(ch));
@@ -122,8 +125,7 @@ public class FXRobotHandler implements IRobot {
 				robot.keyRelease(KeyCode.RIGHT);
 				return;
 			}
-
-		}
+                }
 
 		robot.keyPress(KeyCode.UNDEFINED);
 		robot.keyType(KeyCode.UNDEFINED, Character.toString(ch));

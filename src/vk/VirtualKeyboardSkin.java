@@ -303,7 +303,7 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
                 handler.handle(event(KeyEvent.KEY_PRESSED));
             }
             
-            sendToComponent(this.chars.charAt(0), true);
+            sendToComponent(this.chars.charAt(0), false);
 
         }
         
