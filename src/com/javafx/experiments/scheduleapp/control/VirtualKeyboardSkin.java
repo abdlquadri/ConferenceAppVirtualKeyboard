@@ -29,7 +29,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package vk;
+package com.javafx.experiments.scheduleapp.control;
 
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.scene.control.behavior.BehaviorBase;
@@ -54,7 +54,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
-import vk.robot.FXRobotHandler;
+import org.comtel.javafx.robot.FXRobotHandler;
 
 /**
  * The VirtualKeyboardSkin simply has a pile of keys depending on the keyboard
