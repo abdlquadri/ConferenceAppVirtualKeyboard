@@ -9,7 +9,7 @@ import javafx.stage.Window;
 
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
-import com.javafx.experiments.scheduleapp.control.VirtualKeyboard;
+import com.javafx.scheduleapp.control.VirtualKeyboard;
 
 public class FXRobotHandler {
 

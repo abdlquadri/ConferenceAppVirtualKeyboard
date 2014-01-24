@@ -29,7 +29,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.javafx.experiments.scheduleapp.control;
+package com.javafx.scheduleapp.control;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -69,4 +69,8 @@ public class VirtualKeyboard extends Control {
     public final void setOnAction(EventHandler<KeyEvent> value) { onAction.set(value); }
     public final EventHandler<KeyEvent> getOnAction() { return onAction.get(); }
     public final ObjectProperty<EventHandler<KeyEvent>> onActionProperty() { return onAction; }
+    
+    @Override protected String getUserAgentStylesheet() {
+        return getClass().getResource("css/vk.css").toExternalForm();
+    }
 }

@@ -5,7 +5,7 @@
  */
 package demo;
 
-import com.javafx.experiments.scheduleapp.control.VirtualKeyboard;
+import com.javafx.scheduleapp.control.VirtualKeyboard;
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -117,10 +117,6 @@ public class VKDemo extends Application {
                 }
             }
         });
-         scene.getStylesheets().add(
-                getClass().getResource("vk.css").toExternalForm());
-//         scene.getStylesheets().add(
-//                getClass().getResource("SchedulerStyleSheet-Desktop.css").toExternalForm());
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
