@@ -1,4 +1,4 @@
-package vk.robot;
+package org.comtel.javafx.robot;
 
 
 import javafx.application.Platform;
@@ -9,7 +9,7 @@ import javafx.stage.Window;
 
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
-import vk.VirtualKeyboard;
+import com.javafx.experiments.scheduleapp.control.VirtualKeyboard;
 
 public class FXRobotHandler {
 
