@@ -55,7 +55,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import vk.robot.FXRobotHandler;
-import vk.robot.IRobot;
 
 /**
  * The VirtualKeyboardSkin simply has a pile of keys depending on the keyboard
@@ -71,9 +70,9 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
     private boolean capsDown = false;
     private boolean shiftDown = false;
 
-    
-    private final List<IRobot> robotHandler = new ArrayList<>();
-    
+
+  private final VirtualKeyboard skinnable = getSkinnable();
+  
     void clearShift() {
         shiftDown = false;
         updateKeys();
@@ -128,7 +127,7 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
      */
     private void rebuild() {
         String boardName;
-        VirtualKeyboard.Type type = getSkinnable().getType();
+        VirtualKeyboard.Type type = skinnable.getType();
         switch (type) {
             case NUMERIC:
                 boardName = "SymbolBoard";
@@ -157,20 +156,25 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
      
         
     }
+  
 
     // This skin is designed such that it gives equal widths to all columns. So
     // the pref width is just some hard-coded value (although I could have maybe
     // done it based on the pref width of a text node with the right font).
     @Override
+
     protected double computePrefWidth(double height) {
         final Insets insets = getInsets();
+
         return insets.getLeft() + (56 * numCols) + insets.getRight();
     }
 
     // Pref height is just some value. This isn't overly important.
     @Override
+
     protected double computePrefHeight(double width) {
         final Insets insets = getInsets();
+
         return insets.getTop() + (80 * 5) + insets.getBottom();
     }
 
@@ -298,7 +302,7 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
 
         @Override
         protected void press() {
-            EventHandler<KeyEvent> handler = getSkinnable().getOnAction();
+            EventHandler<KeyEvent> handler = skinnable.getOnAction();
             if (handler != null) {
                 handler.handle(event(KeyEvent.KEY_PRESSED));
             }
@@ -307,24 +311,21 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
 
         }
         
-        /**
-	 * send keyEvent to iRobot implementation
-	 * 
-	 * @param ch
-	 * @param ctrl
-	 */
-	private void sendToComponent(char ch, boolean ctrl) {
+   
 
-            VirtualKeyboardSkin kbs = (VirtualKeyboardSkin)this.getParent();
-            new FXRobotHandler().sendToComponent(kbs.getParent(), ch, ctrl);
-            
+         /* send keyEvent to iRobot implementation
+         *
+         * @param ch
+         * @param ctrl
+         */
+        protected void sendToComponent(char ch, boolean ctrl) {
 
-	}
-
+         FXRobotHandler.sendToComponent(skinnable, ch, ctrl);
+        }
 
         @Override
         protected void release() {
-            EventHandler<KeyEvent> handler = getSkinnable().getOnAction();
+            EventHandler<KeyEvent> handler = skinnable.getOnAction();
             if (handler != null) {
                 handler.handle(event(KeyEvent.KEY_TYPED));
                 handler.handle(event(KeyEvent.KEY_RELEASED));
@@ -379,6 +380,16 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
             text.setText(this.letterChars);
         }
 
+         @Override
+        protected void press() {
+            EventHandler<KeyEvent> handler = skinnable.getOnAction();
+            if (handler != null) {
+                handler.handle(event(KeyEvent.KEY_PRESSED));
+            }
+
+            sendToComponent(this.chars.charAt(0), true);
+
+        }
         @Override
         public void update(boolean capsDown, boolean shiftDown) {
             if (shiftDown && altChars != null) {
@@ -459,7 +470,7 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
         @Override
         protected void release() {
             super.release();
-            getSkinnable().setType(type);
+            skinnable.setType(type);
         }
     }
 
