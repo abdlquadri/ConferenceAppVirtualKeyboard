@@ -8,7 +8,7 @@ package demo;
 import com.sun.javafx.tk.TKSceneListener;
 import com.sun.javafx.tk.quantum.GlassScene;
 import java.lang.reflect.Field;
-import com.javafx.experiments.scheduleapp.control.VirtualKeyboard;
+import com.javafx.scheduleapp.control.VirtualKeyboard;
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
