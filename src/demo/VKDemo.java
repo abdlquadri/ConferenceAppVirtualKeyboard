@@ -127,10 +127,6 @@ public class VKDemo extends Application {
                 }
             }
         });
-         scene.getStylesheets().add(
-                getClass().getResource("vk.css").toExternalForm());
-//         scene.getStylesheets().add(
-//                getClass().getResource("SchedulerStyleSheet-Desktop.css").toExternalForm());
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();

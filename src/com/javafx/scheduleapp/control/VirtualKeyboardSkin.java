@@ -29,14 +29,16 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.javafx.experiments.scheduleapp.control;
+package com.javafx.scheduleapp.control;
 
 import com.sun.javafx.scene.control.behavior.BehaviorBase;
 import com.sun.javafx.scene.control.skin.SkinBase;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -474,7 +476,6 @@ public class VirtualKeyboardSkin extends SkinBase<VirtualKeyboard, BehaviorBase<
         try {
             List<List<Key>> rows = new ArrayList<>(5);
             List<Key> keys = new ArrayList<>(20);
-
             InputStream asciiBoardFile = VirtualKeyboardSkin.class.getResourceAsStream(boardName + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(asciiBoardFile));
             String line;
