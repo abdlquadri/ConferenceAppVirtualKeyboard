@@ -5,8 +5,7 @@
  */
 package demo;
 
-import com.sun.javafx.tk.TKSceneListener;
-import java.lang.reflect.Field;
+import com.javafx.scheduleapp.control.VirtualKeyboard;
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -14,19 +13,15 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Skin;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import vk.VirtualKeyboard;
-import vk.VirtualKeyboardSkin;
 
 /**
  *
@@ -122,10 +117,6 @@ public class VKDemo extends Application {
                 }
             }
         });
-         scene.getStylesheets().add(
-                getClass().getResource("vk.css").toExternalForm());
-//         scene.getStylesheets().add(
-//                getClass().getResource("SchedulerStyleSheet-Desktop.css").toExternalForm());
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
