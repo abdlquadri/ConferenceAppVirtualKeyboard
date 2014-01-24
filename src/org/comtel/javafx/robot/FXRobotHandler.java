@@ -1,4 +1,4 @@
-package vk.robot;
+package org.comtel.javafx.robot;
 
 
 import javafx.application.Platform;
@@ -9,14 +9,13 @@ import javafx.stage.Window;
 
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
-import vk.VirtualKeyboard;
+import com.javafx.scheduleapp.control.VirtualKeyboard;
 
-public class FXRobotHandler implements IRobot {
+public class FXRobotHandler {
 
 //	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(FXRobotHandler.class);
 
-	@Override
-	public void sendToComponent(Object kb, final char ch, final boolean ctrl) {
+	public static void sendToComponent(Object kb, final char ch, final boolean ctrl) {
 //		logger.trace("fire: {}", ch);
 
 		final Window keyboardWindow = ((VirtualKeyboard) kb).getScene().getWindow();
@@ -37,7 +36,7 @@ public class FXRobotHandler implements IRobot {
 		}
 	}
 
-	private void send(Scene scene, char ch, boolean ctrl) {
+	private static void send(Scene scene, char ch, boolean ctrl) {
 		FXRobot robot = FXRobotFactory.createRobot(scene);
 		if (ctrl) {
 			switch (Character.toUpperCase(ch)) {
@@ -126,7 +125,6 @@ public class FXRobotHandler implements IRobot {
 				return;
 			}
                 }
-
 		robot.keyPress(KeyCode.UNDEFINED);
 		robot.keyType(KeyCode.UNDEFINED, Character.toString(ch));
 		robot.keyRelease(KeyCode.UNDEFINED);
