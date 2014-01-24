@@ -35,21 +35,14 @@ public class VKDemo extends Application {
     private Animation keyboardSlideAnimation;
     private VirtualKeyboard keyboard;
     private Scene scene;
-    private TextField btn;
+    private TextField txtField;
     private boolean IS_VK_DISABLED;
 
     @Override
     public void start(Stage primaryStage) {
         keyboard = new VirtualKeyboard();
-      btn = new TextField();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+      txtField = new TextField();
+        txtField.setText("Hello Virtual Keyboard.");
 
         StackPane root = new StackPane() {
             @Override protected void layoutChildren() {
@@ -59,11 +52,12 @@ public class VKDemo extends Application {
                 keyboard.resizeRelocate(0, h, w, w * (3.0/11.0));
 //                VirtualKeyboardSkin skin = (VirtualKeyboardSkin) keyboard.getSkin();
 //                skin.layoutChildren(0, h, w, w * (3.0/11.0));
-                btn.setLayoutX(w - 240);
-                btn.setLayoutY(9);
+                txtField.setMaxWidth(500);
+                txtField.setLayoutX(300);
+                txtField.setLayoutY(9);
             }
         };
-        root.getChildren().addAll(btn,keyboard);
+        root.getChildren().addAll(txtField,keyboard);
         scene = new Scene(root, 900, 550);
            if (!IS_VK_DISABLED) {
             keyboard.setOnAction(new EventHandler<KeyEvent>() {
